@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz 2 — Day 11–20 | English Partner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="quiz-nav">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All Quizzes
+    </a>
+    <span class="quiz-nav-title">Quiz 2 · Day 11–20</span>
+    <span class="quiz-nav-counter" id="navCounter">0 / 10</span>
+  </nav>
+
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <main class="quiz-wrapper">
+
+    <div class="quiz-header">
+      <div class="quiz-day-badge">Intermediate · Day 11 – 20</div>
+      <h1 class="quiz-title">Passive &amp; Conditionals</h1>
+      <p class="quiz-subtitle">Passive Voice &nbsp;·&nbsp; If Clauses &nbsp;·&nbsp; Question Forms &nbsp;·&nbsp; Reported Speech</p>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="submit-area" id="submitArea">
+      <button class="btn-submit" id="submitBtn" disabled>Submit Quiz</button>
+      <p class="submit-hint" id="submitHint">Answer all 10 questions to submit</p>
+    </div>
+
+    <div class="score-card hidden" id="scoreCard">
+      <div class="score-circle">
+        <span class="score-number" id="scoreNumber">0</span>
+        <span class="score-denom">/10</span>
+      </div>
+      <div class="score-percentage" id="scorePercent">0%</div>
+      <div class="score-label">Your Score</div>
+      <p class="score-message" id="scoreMessage"></p>
+      <div class="score-actions">
+        <button class="btn-review" id="reviewBtn">Review Answers</button>
+        <button class="btn-retry" id="retryBtn">Try Again</button>
+        <a href="quiz3.html" class="btn-next">
+          Next Quiz
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="quiz-footer">
+    <a href="quiz1.html">← Quiz 1</a>
+    <span class="quiz-footer-brand">English Partner · Grammar Practice</span>
+    <a href="quiz3.html">Quiz 3 →</a>
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      {
+        id: 11,
+        text: 'Which sentence expresses regret about a past situation?',
+        options: {
+          A: 'I should go to the party.',
+          B: 'I should have gone to the party.',
+          C: 'I could go to the party.',
+          D: 'I will go to the party.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 12,
+        text: 'In Passive Voice, the focus is on:',
+        options: {
+          A: 'The person doing the action.',
+          B: 'The action itself or the receiver of the action.',
+          C: 'The time the action happened.',
+          D: 'The reason why the action happened.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 13,
+        text: 'Change to Passive Voice: "The chef prepares the food."',
+        options: {
+          A: 'The food prepared by the chef.',
+          B: 'The food is prepared by the chef.',
+          C: 'The chef is prepared by the food.',
+          D: 'The food was prepare by the chef.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 14,
+        text: 'Which "If Clause" represents a real possibility in the future?',
+        options: {
+          A: 'If it rains, I stay home.',
+          B: 'If it rains, I will stay home.',
+          C: 'If it rained, I had to stay home.',
+          D: 'If it had rained, I would have stayed home.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 15,
+        text: 'Complete the Type 2 Conditional: "If I won the lottery, I ____ travel the world."',
+        options: {
+          A: 'will',
+          B: 'can',
+          C: 'would',
+          D: 'shall'
+        },
+        answer: 'C'
+      },
+      {
+        id: 16,
+        text: 'What is the correct way to ask a past location question?',
+        options: {
+          A: 'Where you did go?',
+          B: 'Where did you go?',
+          C: 'Where you went?',
+          D: 'Where did you went?'
+        },
+        answer: 'B'
+      },
+      {
+        id: 17,
+        text: 'When asking "Who" about the subject of a past action:',
+        options: {
+          A: 'Use "did" before the verb.',
+          B: 'Use the base form of the verb.',
+          C: 'Do not use "did"; use the past tense verb directly.',
+          D: 'Use "who does."'
+        },
+        answer: 'C'
+      },
+      {
+        id: 18,
+        text: 'Which sentence correctly shows a habitual action in the Present Tense?',
+        options: {
+          A: 'I am drinking tea every morning.',
+          B: 'I drinks tea every morning.',
+          C: 'I drink tea every morning.',
+          D: 'I drinking tea every morning.'
+        },
+        answer: 'C'
+      },
+      {
+        id: 19,
+        text: 'Which is the correct question for asking about a daily habit?',
+        options: {
+          A: 'Do you smoke?',
+          B: 'Are you smoke?',
+          C: 'Does you smoke?',
+          D: 'Is you smoke?'
+        },
+        answer: 'A'
+      },
+      {
+        id: 20,
+        text: 'What are "reporting verbs" in Direct vs. Indirect speech?',
+        options: {
+          A: 'Verbs like "run" and "jump."',
+          B: 'Verbs like "say," "tell," or "ask."',
+          C: 'Verbs like "is," "am," and "are."',
+          D: 'Verbs that only show the future.'
+        },
+        answer: 'B'
+      }
+    ];
+
+    const STATE = { selected: {}, submitted: false, score: 0 };
+
+    function renderQuestions() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = QUESTIONS.map((q, idx) => `
+        <div class="question-card" data-index="${idx}" id="card-${idx}">
+          <div class="question-meta">
+            <span class="question-number">Question ${q.id} <span style="color:var(--text-muted);font-weight:500">of 20</span></span>
+            <div class="question-status" id="status-${idx}"></div>
+          </div>
+          <p class="question-text">${q.text}</p>
+          <ul class="options-list">
+            ${Object.entries(q.options).map(([letter, text]) => `
+              <li class="option-item" data-option="${letter}" data-index="${idx}">
+                <span class="option-letter">${letter}</span>
+                <span class="option-text">${text}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    function updateProgress() {
+      const answered = Object.keys(STATE.selected).length;
+      const pct = (answered / QUESTIONS.length) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('navCounter').textContent = answered + ' / ' + QUESTIONS.length;
+      const btn = document.getElementById('submitBtn');
+      const hint = document.getElementById('submitHint');
+      if (answered === QUESTIONS.length) {
+        btn.disabled = false;
+        hint.textContent = 'All questions answered — ready to submit!';
+      } else {
+        btn.disabled = true;
+        const rem = QUESTIONS.length - answered;
+        hint.textContent = rem + ' question' + (rem > 1 ? 's' : '') + ' remaining';
+      }
+    }
+
+    function handleSubmit() {
+      if (STATE.submitted) return;
+      STATE.submitted = true;
+      STATE.score = 0;
+
+      QUESTIONS.forEach((q, idx) => {
+        const card = document.querySelector(`.question-card[data-index="${idx}"]`);
+        const userAnswer = STATE.selected[idx];
+        const correct = q.answer;
+
+        card.querySelectorAll('.option-item').forEach(opt => {
+          opt.classList.add('disabled');
+          const letter = opt.dataset.option;
+          if (letter === correct) {
+            opt.classList.add('correct');
+            opt.insertAdjacentHTML('beforeend', '<span class="result-icon">✓</span>');
+          } else if (letter === userAnswer && userAnswer !== correct) {
+            opt.classList.add('wrong');
+            opt.insertAdjacentHTML('beforeend', '<span class="result-icon">✗</span>');
+          }
+        });
+
+        if (userAnswer === correct) STATE.score++;
+      });
+
+      showScoreCard();
+    }
+
+    function showScoreCard() {
+      const pct = Math.round((STATE.score / QUESTIONS.length) * 100);
+      document.getElementById('scoreNumber').textContent = STATE.score;
+      document.getElementById('scorePercent').textContent = pct + '%';
+      document.getElementById('scoreMessage').textContent = getMessage(STATE.score);
+      document.getElementById('submitArea').classList.add('hidden');
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('navCounter').textContent = '10 / 10';
+      const sc = document.getElementById('scoreCard');
+      sc.classList.remove('hidden');
+      sc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function getMessage(score) {
+      if (score === 10) return "Perfect score! You've completely mastered Day 11–20. Impressive!";
+      if (score >= 8)  return "Excellent! You have a strong command of passive voice and conditionals.";
+      if (score >= 6)  return "Good effort! Review the highlighted answers to sharpen your skills.";
+      if (score >= 4)  return "Keep practicing! Focus on the topics you found difficult.";
+      return "Don't give up — review the answers and give it another try!";
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderQuestions();
+
+      document.getElementById('questionsContainer').addEventListener('click', e => {
+        if (STATE.submitted) return;
+        const option = e.target.closest('.option-item');
+        if (!option) return;
+        const idx = parseInt(option.dataset.index);
+        const letter = option.dataset.option;
+        const card = document.querySelector(`.question-card[data-index="${idx}"]`);
+
+        card.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        STATE.selected[idx] = letter;
+
+        card.classList.add('answered');
+        document.getElementById('status-' + idx).classList.add('answered');
+
+        updateProgress();
+      });
+
+      document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+
+      document.getElementById('reviewBtn').addEventListener('click', () => {
+        document.getElementById('questionsContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      document.getElementById('retryBtn').addEventListener('click', () => {
+        STATE.selected = {};
+        STATE.submitted = false;
+        STATE.score = 0;
+        renderQuestions();
+        document.getElementById('scoreCard').classList.add('hidden');
+        document.getElementById('submitArea').classList.remove('hidden');
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitHint').textContent = 'Answer all 10 questions to submit';
+        document.getElementById('progressFill').style.width = '0%';
+        document.getElementById('navCounter').textContent = '0 / 10';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>

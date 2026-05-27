@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz 4 — Day 31–40 | English Partner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="quiz-nav">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All Quizzes
+    </a>
+    <span class="quiz-nav-title">Quiz 4 · Day 31–40</span>
+    <span class="quiz-nav-counter" id="navCounter">0 / 10</span>
+  </nav>
+
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <main class="quiz-wrapper">
+
+    <div class="quiz-header">
+      <div class="quiz-day-badge">Intermediate · Day 31 – 40</div>
+      <h1 class="quiz-title">Advanced Grammar</h1>
+      <p class="quiz-subtitle">Wish Clauses &nbsp;·&nbsp; Modal Passive &nbsp;·&nbsp; Common Errors &nbsp;·&nbsp; Complex Grammar</p>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="submit-area" id="submitArea">
+      <button class="btn-submit" id="submitBtn" disabled>Submit Quiz</button>
+      <p class="submit-hint" id="submitHint">Answer all 10 questions to submit</p>
+    </div>
+
+    <div class="score-card hidden" id="scoreCard">
+      <div class="score-circle">
+        <span class="score-number" id="scoreNumber">0</span>
+        <span class="score-denom">/10</span>
+      </div>
+      <div class="score-percentage" id="scorePercent">0%</div>
+      <div class="score-label">Your Score</div>
+      <p class="score-message" id="scoreMessage"></p>
+      <div class="score-actions">
+        <button class="btn-review" id="reviewBtn">Review Answers</button>
+        <button class="btn-retry" id="retryBtn">Try Again</button>
+        <a href="index.html" class="btn-next">
+          All Quizzes
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="quiz-footer">
+    <a href="quiz3.html">← Quiz 3</a>
+    <span class="quiz-footer-brand">English Partner · Grammar Practice</span>
+    <a href="index.html">All Quizzes →</a>
+  </footer>
+
+  <script>
+    const QUESTIONS = [
+      {
+        id: 31,
+        text: 'Which sentence demonstrates an advanced construction combining complex grammar?',
+        options: {
+          A: 'I am a teacher.',
+          B: '"Even though it was raining, he decided to walk to the office which is 5km away."',
+          C: 'He go to school.',
+          D: 'She is happy today.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 32,
+        text: 'Which phrase expresses a wish about a present situation that is different from reality?',
+        options: {
+          A: 'I wish I am rich.',
+          B: 'I wish I were rich.',
+          C: 'I wish I will be rich.',
+          D: 'I wish I can be rich.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 33,
+        text: 'How do you correctly express regret about not studying harder in the past?',
+        options: {
+          A: 'I wish I study harder.',
+          B: 'I wish I had studied harder.',
+          C: 'I wish I am studying harder.',
+          D: 'I wish I will study harder.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 34,
+        text: 'What is a common error in spoken English?',
+        options: {
+          A: 'Using correct punctuation.',
+          B: 'Subject-verb disagreement (e.g., "He go" instead of "He goes").',
+          C: 'Using too many paragraphs.',
+          D: 'Writing in cursive.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 35,
+        text: 'Which sentence shows the correct use of "When" as a conjunction linking two actions?',
+        options: {
+          A: 'When he arrived, I was sleeping.',
+          B: 'When he arrive, I sleep.',
+          C: 'When he arriving, I was sleep.',
+          D: 'When he will arrive, I sleep.'
+        },
+        answer: 'A'
+      },
+      {
+        id: 36,
+        text: 'Which word describes the likelihood of something happening?',
+        options: {
+          A: 'Force',
+          B: 'Decision',
+          C: 'Probability',
+          D: 'Action'
+        },
+        answer: 'C'
+      },
+      {
+        id: 37,
+        text: 'How do you form Passive Voice using the modal "Should"?',
+        options: {
+          A: 'Should + V1',
+          B: 'Should + been + V3',
+          C: 'Should + be + V3',
+          D: 'Should + V2'
+        },
+        answer: 'C'
+      },
+      {
+        id: 38,
+        text: 'Change to Passive Voice: "We should complete the task."',
+        options: {
+          A: 'The task should complete.',
+          B: 'The task should be completed.',
+          C: 'The task should been completed.',
+          D: 'The task should be complete.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 39,
+        text: 'Why is Passive Voice commonly used in news reports?',
+        options: {
+          A: 'To make the story longer.',
+          B: 'To focus on events and people affected rather than every action performer.',
+          C: 'Because active voice is not allowed in news.',
+          D: 'To make the text more informal.'
+        },
+        answer: 'B'
+      },
+      {
+        id: 40,
+        text: 'Complete in Passive Voice: "The bridge ____ damaged by the floods."',
+        options: {
+          A: 'was',
+          B: 'is being',
+          C: 'were',
+          D: 'has'
+        },
+        answer: 'A'
+      }
+    ];
+
+    const STATE = { selected: {}, submitted: false, score: 0 };
+
+    function renderQuestions() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = QUESTIONS.map((q, idx) => `
+        <div class="question-card" data-index="${idx}" id="card-${idx}">
+          <div class="question-meta">
+            <span class="question-number">Question ${q.id} <span style="color:var(--text-muted);font-weight:500">of 40</span></span>
+            <div class="question-status" id="status-${idx}"></div>
+          </div>
+          <p class="question-text">${q.text}</p>
+          <ul class="options-list">
+            ${Object.entries(q.options).map(([letter, text]) => `
+              <li class="option-item" data-option="${letter}" data-index="${idx}">
+                <span class="option-letter">${letter}</span>
+                <span class="option-text">${text}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    function updateProgress() {
+      const answered = Object.keys(STATE.selected).length;
+      const pct = (answered / QUESTIONS.length) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('navCounter').textContent = answered + ' / ' + QUESTIONS.length;
+      const btn = document.getElementById('submitBtn');
+      const hint = document.getElementById('submitHint');
+      if (answered === QUESTIONS.length) {
+        btn.disabled = false;
+        hint.textContent = 'All questions answered — ready to submit!';
+      } else {
+        btn.disabled = true;
+        const rem = QUESTIONS.length - answered;
+        hint.textContent = rem + ' question' + (rem > 1 ? 's' : '') + ' remaining';
+      }
+    }
+
+    function handleSubmit() {
+      if (STATE.submitted) return;
+      STATE.submitted = true;
+      STATE.score = 0;
+
+      QUESTIONS.forEach((q, idx) => {
+        const card = document.querySelector(`.question-card[data-index="${idx}"]`);
+        const userAnswer = STATE.selected[idx];
+        const correct = q.answer;
+
+        card.querySelectorAll('.option-item').forEach(opt => {
+          opt.classList.add('disabled');
+          const letter = opt.dataset.option;
+          if (letter === correct) {
+            opt.classList.add('correct');
+            opt.insertAdjacentHTML('beforeend', '<span class="result-icon">✓</span>');
+          } else if (letter === userAnswer && userAnswer !== correct) {
+            opt.classList.add('wrong');
+            opt.insertAdjacentHTML('beforeend', '<span class="result-icon">✗</span>');
+          }
+        });
+
+        if (userAnswer === correct) STATE.score++;
+      });
+
+      showScoreCard();
+    }
+
+    function showScoreCard() {
+      const pct = Math.round((STATE.score / QUESTIONS.length) * 100);
+      document.getElementById('scoreNumber').textContent = STATE.score;
+      document.getElementById('scorePercent').textContent = pct + '%';
+      document.getElementById('scoreMessage').textContent = getMessage(STATE.score);
+      document.getElementById('submitArea').classList.add('hidden');
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('navCounter').textContent = '10 / 10';
+      const sc = document.getElementById('scoreCard');
+      sc.classList.remove('hidden');
+      sc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function getMessage(score) {
+      if (score === 10) return "Perfect score! You've mastered all 40 days of grammar. You're a grammar champion!";
+      if (score >= 8)  return "Excellent! You have a strong command of advanced grammar structures.";
+      if (score >= 6)  return "Great effort! Review the highlighted answers and keep pushing forward.";
+      if (score >= 4)  return "Good start! Focus on wish clauses and modal passive structures.";
+      return "Keep going — review all the quizzes and try again. Practice makes perfect!";
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderQuestions();
+
+      document.getElementById('questionsContainer').addEventListener('click', e => {
+        if (STATE.submitted) return;
+        const option = e.target.closest('.option-item');
+        if (!option) return;
+        const idx = parseInt(option.dataset.index);
+        const letter = option.dataset.option;
+        const card = document.querySelector(`.question-card[data-index="${idx}"]`);
+
+        card.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        STATE.selected[idx] = letter;
+
+        card.classList.add('answered');
+        document.getElementById('status-' + idx).classList.add('answered');
+
+        updateProgress();
+      });
+
+      document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+
+      document.getElementById('reviewBtn').addEventListener('click', () => {
+        document.getElementById('questionsContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      document.getElementById('retryBtn').addEventListener('click', () => {
+        STATE.selected = {};
+        STATE.submitted = false;
+        STATE.score = 0;
+        renderQuestions();
+        document.getElementById('scoreCard').classList.add('hidden');
+        document.getElementById('submitArea').classList.remove('hidden');
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitHint').textContent = 'Answer all 10 questions to submit';
+        document.getElementById('progressFill').style.width = '0%';
+        document.getElementById('navCounter').textContent = '0 / 10';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>
