@@ -2,10 +2,10 @@
    CSS Variables & Reset
    =================================================== */
 :root {
-  --primary:       #C8102E;
-  --primary-hover: #a00e25;
-  --navy:          #1B2E6B;
-  --navy-soft:     #2d3f82;
+  --primary:       #B31432;
+  --primary-hover: #8e0f26;
+  --navy:          #1C3272;
+  --navy-soft:     #243d8a;
   --dark:          #0f172a;
   --text-muted:    #64748b;
   --bg-page:       #f4f6fa;
@@ -15,10 +15,10 @@
   --correct-bg:    #dcfce7;
   --wrong:         #dc2626;
   --wrong-bg:      #fee2e2;
-  --selected-bg:   #eff6ff;
-  --selected-border:#1B2E6B;
-  --shadow-card:   0 4px 24px -4px rgb(27 46 107 / 0.12);
-  --shadow-hover:  0 12px 32px -6px rgb(27 46 107 / 0.2);
+  --selected-bg:   #eef1fb;
+  --selected-border:#1C3272;
+  --shadow-card:   0 4px 24px -4px rgb(28 50 114 / 0.12);
+  --shadow-hover:  0 12px 32px -6px rgb(28 50 114 / 0.2);
   --radius-card:   1.25rem;
   --radius-option: 0.75rem;
   --transition:    all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -287,27 +287,23 @@ ul { list-style: none; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255,255,255,0.96);
+  background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.25rem;
-  height: 56px;
+  padding: 0.5rem 1.5rem;
+  height: 64px;
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 12px rgb(0 0 0 / 0.06);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.07);
 }
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--navy);
-  transition: var(--transition);
+.nav-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
-.back-link:hover { color: var(--primary); }
 .quiz-nav-title {
   font-family: 'Outfit', sans-serif;
   font-size: 0.875rem;
@@ -329,7 +325,7 @@ ul { list-style: none; }
 /* Progress Bar */
 .progress-bar-track {
   position: sticky;
-  top: 56px;
+  top: 64px;
   z-index: 99;
   height: 4px;
   background: var(--border);
