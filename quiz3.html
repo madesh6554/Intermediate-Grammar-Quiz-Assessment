@@ -22,7 +22,10 @@
 
   <div class="reviewing-bar hidden" id="reviewingBar">
     <span id="reviewingLabel">Reviewing Attempt 1 — Score: 0/10</span>
-    <button class="btn-back-results" id="backToResults">← Back to Results</button>
+    <div class="reviewing-bar-actions">
+      <button class="btn-retake-review" id="retakeFromReview">Retake Quiz</button>
+      <button class="btn-back-results" id="backToResults">← Back to Results</button>
+    </div>
   </div>
 
   <main class="quiz-wrapper">
@@ -206,7 +209,7 @@
       document.getElementById('questionsContainer').innerHTML = QUESTIONS.map((q, idx) => `
         <div class="question-card" data-index="${idx}" id="card-${idx}">
           <div class="question-meta">
-            <span class="question-number">Question ${q.id} <span style="color:var(--text-muted);font-weight:500">of 30</span></span>
+            <span class="question-number">Question ${idx + 1} <span style="color:var(--text-muted);font-weight:500">of 10</span></span>
             <div class="question-status${rev?' answered':''}" id="status-${idx}"></div>
           </div>
           <p class="question-text">${q.text}</p>
@@ -292,6 +295,7 @@
           document.getElementById('submitArea').classList.add('hidden');
           document.getElementById('reviewingLabel').textContent='Reviewing Attempt '+a.num+' — Score: '+a.score+'/'+QUESTIONS.length;
           document.getElementById('reviewingBar').classList.remove('hidden');
+          updateRetakeBtn();
           window.scrollTo({top:0,behavior:'smooth'});
         });
       });
@@ -304,6 +308,8 @@
       if(score>=4)return"Keep going! Focus on perfect tenses and relative pronouns.";
       return"Don't give up — review the answers and try again. You've got this!";
     }
+
+    function updateRetakeBtn(){const d=loadData(),r=MAX_ATTEMPTS-d.attempts.length,btn=document.getElementById('retakeFromReview');if(r>0){btn.disabled=false;btn.textContent=r===1?'Retake (1 attempt left)':'Retake ('+r+' attempts left)';}else{btn.disabled=true;btn.textContent='Attempt Limit Reached';}}
 
     document.addEventListener('DOMContentLoaded',()=>{
       const data=loadData();
@@ -329,7 +335,7 @@
         document.getElementById('attemptsToggleLabel').textContent='View Attempt History';
         renderQuestions(last.answers,sc);document.getElementById('submitArea').classList.add('hidden');
         document.getElementById('reviewingLabel').textContent='Reviewing Attempt '+last.num+' — Score: '+last.score+'/'+QUESTIONS.length;
-        document.getElementById('reviewingBar').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});
+        document.getElementById('reviewingBar').classList.remove('hidden');updateRetakeBtn();window.scrollTo({top:0,behavior:'smooth'});
       });
 
       document.getElementById('retryBtn').addEventListener('click',()=>{
@@ -353,6 +359,19 @@
         const d=loadData(),sc=d.attempts.length>=MAX_ATTEMPTS;
         renderQuestions(d.attempts[d.attempts.length-1].answers,sc);
         document.getElementById('submitArea').classList.add('hidden');showModal(d);
+      });
+
+      document.getElementById('retakeFromReview').addEventListener('click',()=>{
+        const d=loadData();if(d.attempts.length>=MAX_ATTEMPTS)return;
+        document.getElementById('reviewingBar').classList.add('hidden');
+        document.getElementById('attemptsHistory').classList.add('hidden');
+        document.getElementById('attemptsToggle').classList.remove('open');
+        document.getElementById('attemptsToggleLabel').textContent='View Attempt History';
+        STATE.selected={};STATE.submitted=false;STATE.score=0;renderQuestions();
+        document.getElementById('submitArea').classList.remove('hidden');document.getElementById('submitBtn').disabled=true;
+        document.getElementById('submitHint').textContent='Answer all 10 questions to submit';
+        document.getElementById('progressFill').style.width='0%';document.getElementById('navCounter').textContent='0 / 10';
+        window.scrollTo({top:0,behavior:'smooth'});
       });
     });
   </script>

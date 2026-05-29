@@ -22,7 +22,10 @@
 
   <div class="reviewing-bar hidden" id="reviewingBar">
     <span id="reviewingLabel">Reviewing Attempt 1 — Score: 0/10</span>
-    <button class="btn-back-results" id="backToResults">← Back to Results</button>
+    <div class="reviewing-bar-actions">
+      <button class="btn-retake-review" id="retakeFromReview">Retake Quiz</button>
+      <button class="btn-back-results" id="backToResults">← Back to Results</button>
+    </div>
   </div>
 
   <main class="quiz-wrapper">
@@ -341,6 +344,7 @@
           document.getElementById('submitArea').classList.add('hidden');
           document.getElementById('reviewingLabel').textContent = 'Reviewing Attempt ' + a.num + ' — Score: ' + a.score + '/' + QUESTIONS.length;
           document.getElementById('reviewingBar').classList.remove('hidden');
+          updateRetakeBtn();
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       });
@@ -352,6 +356,19 @@
       if (score >= 6)  return "Good job! A little more practice and you'll ace it next time.";
       if (score >= 4)  return "Keep going! Review the highlighted answers and try again.";
       return "Don't give up — every attempt helps you learn. Review and retry!";
+    }
+
+    function updateRetakeBtn() {
+      const d = loadData();
+      const remaining = MAX_ATTEMPTS - d.attempts.length;
+      const btn = document.getElementById('retakeFromReview');
+      if (remaining > 0) {
+        btn.disabled = false;
+        btn.textContent = remaining === 1 ? 'Retake (1 attempt left)' : 'Retake (' + remaining + ' attempts left)';
+      } else {
+        btn.disabled = true;
+        btn.textContent = 'Attempt Limit Reached';
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -396,6 +413,7 @@
         document.getElementById('submitArea').classList.add('hidden');
         document.getElementById('reviewingLabel').textContent = 'Reviewing Attempt ' + last.num + ' — Score: ' + last.score + '/' + QUESTIONS.length;
         document.getElementById('reviewingBar').classList.remove('hidden');
+        updateRetakeBtn();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
@@ -432,6 +450,23 @@
         renderQuestions(d.attempts[d.attempts.length - 1].answers, showCorrect);
         document.getElementById('submitArea').classList.add('hidden');
         showModal(d);
+      });
+
+      document.getElementById('retakeFromReview').addEventListener('click', () => {
+        const d = loadData();
+        if (d.attempts.length >= MAX_ATTEMPTS) return;
+        document.getElementById('reviewingBar').classList.add('hidden');
+        document.getElementById('attemptsHistory').classList.add('hidden');
+        document.getElementById('attemptsToggle').classList.remove('open');
+        document.getElementById('attemptsToggleLabel').textContent = 'View Attempt History';
+        STATE.selected = {}; STATE.submitted = false; STATE.score = 0;
+        renderQuestions();
+        document.getElementById('submitArea').classList.remove('hidden');
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitHint').textContent = 'Answer all 10 questions to submit';
+        document.getElementById('progressFill').style.width = '0%';
+        document.getElementById('navCounter').textContent = '0 / 10';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
   </script>
