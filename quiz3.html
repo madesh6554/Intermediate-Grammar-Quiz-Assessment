@@ -68,7 +68,7 @@
         <button class="btn-review" id="reviewBtn">Review Answers</button>
         <button class="btn-retry" id="retryBtn">Try Again</button>
       </div>
-      <div class="attempts-locked hidden" id="attemptsLocked">Maximum 3 attempts reached — no more retries</div>
+      <div class="attempts-locked hidden" id="attemptsLocked">Maximum 2 attempts reached — no more retries</div>
     </div>
   </div>
 
@@ -191,7 +191,7 @@
     ];
 
     const QUIZ_KEY = 'ep_quiz3';
-    const MAX_ATTEMPTS = 3;
+    const MAX_ATTEMPTS = 2;
     const STATE = { selected: {}, submitted: false, score: 0 };
 
     function loadData() {
@@ -199,10 +199,10 @@
       catch(e) { return { attempts: [], bestScore: -1, bestIdx: -1 }; }
     }
     function saveData(d) { localStorage.setItem(QUIZ_KEY, JSON.stringify(d)); }
-    function optClass(u,l,c){if(l===c)return' correct disabled';if(l===u&&u!==c)return' wrong disabled';return' disabled';}
-    function optIcon(u,l,c){if(l===c)return'<span class="result-icon">✓</span>';if(l===u&&u!==c)return'<span class="result-icon">✗</span>';return'';}
+    function optClass(u,l,c,sc){if(l===c&&(sc||l===u))return' correct disabled';if(l===u&&u!==c)return' wrong disabled';return' disabled';}
+    function optIcon(u,l,c,sc){if(l===c&&(sc||l===u))return'<span class="result-icon">✓</span>';if(l===u&&u!==c)return'<span class="result-icon">✗</span>';return'';}
 
-    function renderQuestions(rev) {
+    function renderQuestions(rev, sc) {
       document.getElementById('questionsContainer').innerHTML = QUESTIONS.map((q, idx) => `
         <div class="question-card" data-index="${idx}" id="card-${idx}">
           <div class="question-meta">
@@ -212,9 +212,9 @@
           <p class="question-text">${q.text}</p>
           <ul class="options-list">
             ${Object.entries(q.options).map(([l,t])=>`
-              <li class="option-item${rev?optClass(rev[idx],l,q.answer):''}" data-option="${l}" data-index="${idx}">
+              <li class="option-item${rev?optClass(rev[idx],l,q.answer,sc):''}" data-option="${l}" data-index="${idx}">
                 <span class="option-letter">${l}</span><span class="option-text">${t}</span>
-                ${rev?optIcon(rev[idx],l,q.answer):''}
+                ${rev?optIcon(rev[idx],l,q.answer,sc):''}
               </li>`).join('')}
           </ul>
         </div>`).join('');
@@ -231,20 +231,21 @@
 
     function handleSubmit() {
       if(STATE.submitted)return; STATE.submitted=true; STATE.score=0;
+      QUESTIONS.forEach((q,idx)=>{ if(STATE.selected[idx]===q.answer)STATE.score++; });
+      const data=loadData();const num=data.attempts.length+1;
+      data.attempts.push({num,score:STATE.score,answers:Object.assign({},STATE.selected)});
+      if(STATE.score>data.bestScore){data.bestScore=STATE.score;data.bestIdx=data.attempts.length-1;}
+      saveData(data);
+      const isLast=data.attempts.length>=MAX_ATTEMPTS;
       QUESTIONS.forEach((q,idx)=>{
         const card=document.querySelector(`.question-card[data-index="${idx}"]`);
         const ua=STATE.selected[idx],c=q.answer;
         card.querySelectorAll('.option-item').forEach(opt=>{
           opt.classList.add('disabled');const l=opt.dataset.option;
-          if(l===c){opt.classList.add('correct');opt.insertAdjacentHTML('beforeend','<span class="result-icon">✓</span>');}
+          if(l===c&&(isLast||l===ua)){opt.classList.add('correct');opt.insertAdjacentHTML('beforeend','<span class="result-icon">✓</span>');}
           else if(l===ua&&ua!==c){opt.classList.add('wrong');opt.insertAdjacentHTML('beforeend','<span class="result-icon">✗</span>');}
         });
-        if(ua===c)STATE.score++;
       });
-      const data=loadData();const num=data.attempts.length+1;
-      data.attempts.push({num,score:STATE.score,answers:Object.assign({},STATE.selected)});
-      if(STATE.score>data.bestScore){data.bestScore=STATE.score;data.bestIdx=data.attempts.length-1;}
-      saveData(data);
       document.getElementById('progressFill').style.width='100%';
       document.getElementById('navCounter').textContent='10 / 10';
       showModal(data);
@@ -279,6 +280,7 @@
           </div>
           <button class="btn-review-attempt" data-attempt="${i}">Review</button>
         </div>`).join('');
+      const sc=data.attempts.length>=MAX_ATTEMPTS;
       list.querySelectorAll('.btn-review-attempt').forEach(btn=>{
         btn.addEventListener('click',()=>{
           const i=parseInt(btn.dataset.attempt),a=data.attempts[i];
@@ -286,7 +288,7 @@
           document.getElementById('attemptsHistory').classList.add('hidden');
           document.getElementById('attemptsToggle').classList.remove('open');
           document.getElementById('attemptsToggleLabel').textContent='View Attempt History';
-          renderQuestions(a.answers);
+          renderQuestions(a.answers,sc);
           document.getElementById('submitArea').classList.add('hidden');
           document.getElementById('reviewingLabel').textContent='Reviewing Attempt '+a.num+' — Score: '+a.score+'/'+QUESTIONS.length;
           document.getElementById('reviewingBar').classList.remove('hidden');
@@ -305,7 +307,7 @@
 
     document.addEventListener('DOMContentLoaded',()=>{
       const data=loadData();
-      if(data.attempts.length>=MAX_ATTEMPTS){renderQuestions(data.attempts[data.bestIdx].answers);document.getElementById('submitArea').classList.add('hidden');STATE.submitted=true;showModal(data);}
+      if(data.attempts.length>=MAX_ATTEMPTS){renderQuestions(data.attempts[data.bestIdx].answers,true);document.getElementById('submitArea').classList.add('hidden');STATE.submitted=true;showModal(data);}
       else renderQuestions();
 
       document.getElementById('questionsContainer').addEventListener('click',e=>{
@@ -320,12 +322,12 @@
       document.getElementById('submitBtn').addEventListener('click',handleSubmit);
 
       document.getElementById('reviewBtn').addEventListener('click',()=>{
-        const d=loadData(),last=d.attempts[d.attempts.length-1];
+        const d=loadData(),last=d.attempts[d.attempts.length-1],sc=d.attempts.length>=MAX_ATTEMPTS;
         document.getElementById('scoreModal').classList.add('hidden');
         document.getElementById('attemptsHistory').classList.add('hidden');
         document.getElementById('attemptsToggle').classList.remove('open');
         document.getElementById('attemptsToggleLabel').textContent='View Attempt History';
-        renderQuestions(last.answers);document.getElementById('submitArea').classList.add('hidden');
+        renderQuestions(last.answers,sc);document.getElementById('submitArea').classList.add('hidden');
         document.getElementById('reviewingLabel').textContent='Reviewing Attempt '+last.num+' — Score: '+last.score+'/'+QUESTIONS.length;
         document.getElementById('reviewingBar').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});
       });
@@ -348,7 +350,8 @@
 
       document.getElementById('backToResults').addEventListener('click',()=>{
         document.getElementById('reviewingBar').classList.add('hidden');STATE.submitted=true;
-        const d=loadData();renderQuestions(d.attempts[d.attempts.length-1].answers);
+        const d=loadData(),sc=d.attempts.length>=MAX_ATTEMPTS;
+        renderQuestions(d.attempts[d.attempts.length-1].answers,sc);
         document.getElementById('submitArea').classList.add('hidden');showModal(d);
       });
     });
