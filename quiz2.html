@@ -193,6 +193,24 @@
       }
     ];
 
+    const params = new URLSearchParams(window.location.search);
+    const phone  = params.get('phone_number') || '';
+    const sender = params.get('sender') || params.get('course') || 'General';
+    const isWhatsApp = /WhatsApp/i.test(navigator.userAgent);
+
+    function showWhatsAppBlock() {
+      document.body.innerHTML = `
+        <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f4f6fa;font-family:'Outfit',sans-serif;padding:2rem;">
+          <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;max-width:360px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.10);">
+            <div style="font-size:3rem;margin-bottom:1rem;">📱</div>
+            <h2 style="color:#1C3272;font-size:1.4rem;margin-bottom:.75rem;">Open from WhatsApp</h2>
+            <p style="color:#555;font-size:0.95rem;line-height:1.6;margin-bottom:.5rem;">Please tap this link from your WhatsApp message — it cannot be opened in a regular browser.</p>
+            <p style="color:#888;font-size:0.85rem;">இந்த link-ஐ WhatsApp message-ல் இருந்து திறக்கவும்.</p>
+            <div style="margin-top:1.5rem;display:inline-block;background:#B31432;color:#fff;padding:.6rem 1.4rem;border-radius:8px;font-size:.9rem;">English Partner — The Language Hub</div>
+          </div>
+        </div>`;
+    }
+
     const QUIZ_KEY = 'ep_quiz2';
     const MAX_ATTEMPTS = 2;
     const STATE = { selected: {}, submitted: false, score: 0 };
@@ -248,6 +266,24 @@
       data.attempts.push({ num: attemptNum, score: STATE.score, answers: Object.assign({}, STATE.selected) });
       if (STATE.score > data.bestScore) { data.bestScore = STATE.score; data.bestIdx = data.attempts.length - 1; }
       saveData(data);
+
+      fetch('WEBHOOK_URL_HERE', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone_number: phone,
+          sender: sender,
+          quiz: 'Day 11-20',
+          attempt: attemptNum,
+          score: STATE.score,
+          total: QUESTIONS.length,
+          percent: Math.round((STATE.score / QUESTIONS.length) * 100),
+          best_score: data.bestScore,
+          submitted_at: new Date().toISOString(),
+        }),
+        mode: 'no-cors',
+      }).catch(() => {});
+
       const isLast = data.attempts.length >= MAX_ATTEMPTS;
       QUESTIONS.forEach((q, idx) => {
         const card = document.querySelector(`.question-card[data-index="${idx}"]`);
@@ -330,6 +366,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      if (!isWhatsApp) { showWhatsAppBlock(); return; }
+
       const data = loadData();
       if (data.attempts.length >= MAX_ATTEMPTS) {
         const best = data.attempts[data.bestIdx]; renderQuestions(best.answers, true);
